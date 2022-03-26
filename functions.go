@@ -1,12 +1,7 @@
-package linq
+package go_generic_linq
 
 func FromSlice[T any](items []T) Enumerable[T] {
 	return &SliceEnumerable[T]{items}
-}
-
-func CreateList[T any]() []T {
-	s := make([]T, 0)
-	return s
 }
 
 func Filter[T any](enum Enumerable[T], predicate func(T) bool) Enumerable[T] {
@@ -24,7 +19,7 @@ func Filter[T any](enum Enumerable[T], predicate func(T) bool) Enumerable[T] {
 }
 
 func ToSlice[T any](enum Enumerable[T]) []T {
-	s := CreateList[T]()
+	s := make([]T, 0)
 	enum.Enumerate(func(item T) bool {
 		s = append(s, item)
 		return YieldContinue
