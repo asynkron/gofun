@@ -113,3 +113,31 @@ func Map[T any, U any](enum Enumerable[T], mapper func(T) U) Enumerable[U] {
 
 	return &FuncEnumerable[U]{f}
 }
+
+func Skip[T any](enum Enumerable[T], count int) Enumerable[T] {
+	f := func(yield Yield[T]) {
+		enum.Enumerate(func(item T) bool {
+			if count > 0 {
+				count--
+				return YieldContinue
+			}
+			yield(item)
+			return YieldContinue
+		})
+	}
+	return &FuncEnumerable[T]{f}
+}
+
+func Limit[T any](enum Enumerable[T], count int) Enumerable[T] {
+	f := func(yield Yield[T]) {
+		enum.Enumerate(func(item T) bool {
+			if count > 0 {
+				yield(item)
+				count--
+				return YieldContinue
+			}
+			return YieldBreak
+		})
+	}
+	return &FuncEnumerable[T]{f}
+}
