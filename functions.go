@@ -28,70 +28,74 @@ func ToSlice[T any](enum Enumerable[T]) []T {
 }
 
 func FirstOrDefault[T any](enum Enumerable[T], defaultValue T) T {
-	if s, ok := enum.(*SliceEnumerable[T]); ok {
-		if len(s.items) > 0 {
-			return s.items[0]
+	switch enum.(type) {
+	case *SliceEnumerable[T]:
+		if len(enum.(*SliceEnumerable[T]).items) > 0 {
+			return enum.(*SliceEnumerable[T]).items[0]
 		}
 		return defaultValue
+	default:
+		var result T
+		enum.Enumerate(func(item T) bool {
+			result = item
+			return YieldBreak
+		})
+		return result
 	}
-
-	var result T
-	enum.Enumerate(func(item T) bool {
-		result = item
-		return YieldBreak
-	})
-	return result
 }
 
 func LastOrDefault[T any](enum Enumerable[T], defaultValue T) T {
 
-	if s, ok := enum.(*SliceEnumerable[T]); ok {
+	switch enum.(type) {
+	case *SliceEnumerable[T]:
+		s := enum.(*SliceEnumerable[T])
 		if len(s.items) > 0 {
 			return s.items[len(s.items)-1]
 		}
 		return defaultValue
+	default:
+		var result T
+		enum.Enumerate(func(item T) bool {
+			result = item
+			return YieldContinue
+		})
+		return result
 	}
-
-	var result T
-	enum.Enumerate(func(item T) bool {
-		result = item
-		return YieldContinue
-	})
-	return result
 }
 
 func ElementAtOrDefault[T any](enum Enumerable[T], index int, defaultValue T) T {
-	if s, ok := enum.(*SliceEnumerable[T]); ok {
-		if len(s.items) > index {
-			return s.items[index]
+	switch enum.(type) {
+	case *SliceEnumerable[T]:
+		if len(enum.(*SliceEnumerable[T]).items) > index {
+			return enum.(*SliceEnumerable[T]).items[index]
 		}
 		return defaultValue
+	default:
+		var result T
+		enum.Enumerate(func(item T) bool {
+			if index == 0 {
+				result = item
+				return YieldBreak
+			}
+			index--
+			return YieldContinue
+		})
+		return result
 	}
-
-	var result T
-	enum.Enumerate(func(item T) bool {
-		if index == 0 {
-			result = item
-			return YieldBreak
-		}
-		index--
-		return YieldContinue
-	})
-	return result
 }
 
 func Count[T any](enum Enumerable[T]) int {
-
-	if s, ok := enum.(*SliceEnumerable[T]); ok {
-		return len(s.items)
+	switch enum.(type) {
+	case *SliceEnumerable[T]:
+		return len(enum.(*SliceEnumerable[T]).items)
+	default:
+		var count int
+		enum.Enumerate(func(item T) bool {
+			count++
+			return YieldContinue
+		})
+		return count
 	}
-
-	var count int
-	enum.Enumerate(func(item T) bool {
-		count++
-		return YieldContinue
-	})
-	return count
 }
 
 func From[T any](items ...T) Enumerable[T] {

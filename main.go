@@ -10,7 +10,7 @@ func main() {
 	v3 := Map[string, int](v2, func(s string) int {
 		return len(s)
 	})
-	res := v3.ToSlice()
+	v4 := ToSlice(v3)
 
-	fmt.Printf("%v", res)
+	fmt.Printf("%v", v4)
 }
