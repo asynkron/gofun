@@ -1,4 +1,4 @@
-package go_generic_linq
+package main
 
 const (
 	YieldContinue = true

@@ -1,4 +1,4 @@
-package go_generic_linq
+package main
 
 func FromSlice[T any](items []T) Enumerable[T] {
 	return &SliceEnumerable[T]{items}
@@ -96,4 +96,16 @@ func Count[T any](enum Enumerable[T]) int {
 
 func From[T any](items ...T) Enumerable[T] {
 	return &SliceEnumerable[T]{items}
+}
+
+func Map[T any, U any](enum Enumerable[T], mapper func(T) U) Enumerable[U] {
+
+	f := func(yield Yield[U]) {
+		enum.Enumerate(func(item T) bool {
+			yield(mapper(item))
+			return YieldContinue
+		})
+	}
+
+	return &FuncEnumerable[U]{f}
 }

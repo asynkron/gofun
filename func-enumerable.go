@@ -1,4 +1,4 @@
-package go_generic_linq
+package main
 
 type FuncEnumerable[T any] struct {
 	enumerateFun func(yield Yield[T])
