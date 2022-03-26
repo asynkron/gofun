@@ -103,7 +103,6 @@ func From[T any](items ...T) Enumerable[T] {
 }
 
 func Map[T any, U any](enum Enumerable[T], mapper func(T) U) Enumerable[U] {
-
 	f := func(yield Yield[U]) {
 		enum.Enumerate(func(item T) bool {
 			yield(mapper(item))
