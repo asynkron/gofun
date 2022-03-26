@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func FromSlice[T any](items []T) Enumerable[T] {
 	return &SliceEnumerable[T]{items}
 }
@@ -9,7 +11,8 @@ func Filter[T any](enum Enumerable[T], predicate func(T) bool) Enumerable[T] {
 	f := func(yield Yield[T]) {
 		enum.Enumerate(func(item T) bool {
 			if predicate(item) {
-				yield(item)
+				res := yield(item)
+				return res
 			}
 			return YieldContinue
 		})
@@ -105,8 +108,8 @@ func From[T any](items ...T) Enumerable[T] {
 func Map[T any, U any](enum Enumerable[T], mapper func(T) U) Enumerable[U] {
 	f := func(yield Yield[U]) {
 		enum.Enumerate(func(item T) bool {
-			yield(mapper(item))
-			return YieldContinue
+			res := yield(mapper(item))
+			return res
 		})
 	}
 
@@ -120,8 +123,8 @@ func Skip[T any](enum Enumerable[T], count int) Enumerable[T] {
 				count--
 				return YieldContinue
 			}
-			yield(item)
-			return YieldContinue
+			res := yield(item)
+			return res
 		})
 	}
 	return &FuncEnumerable[T]{f}
@@ -130,10 +133,11 @@ func Skip[T any](enum Enumerable[T], count int) Enumerable[T] {
 func Limit[T any](enum Enumerable[T], count int) Enumerable[T] {
 	f := func(yield Yield[T]) {
 		enum.Enumerate(func(item T) bool {
+			fmt.Printf("Limit: %v\n", item)
 			if count > 0 {
-				yield(item)
+				res := yield(item)
 				count--
-				return YieldContinue
+				return res
 			}
 			return YieldBreak
 		})
