@@ -1,6 +1,9 @@
 package enumerable
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestToMapOfSlice(t *testing.T) {
 	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10}
@@ -218,6 +221,10 @@ func TestConcat(t *testing.T) {
 	e1 := FromSlice(values1)
 	e2 := FromSlice(values2)
 	c := Concat(e1, e2)
+
+	s := ToSlice(c)
+	fmt.Printf("%v", s)
+
 	f := FirstOrDefault(c, "default")
 	if f != "a" {
 		t.Errorf("Expected a got %s", f)

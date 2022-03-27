@@ -315,11 +315,16 @@ func ToMapOfSlice[T any, U comparable](enum Enumerable[T], mapper func(T) U) map
 }
 
 func Concat[T any](enum Enumerable[T], other Enumerable[T]) Enumerable[T] {
+	b := YieldContinue
 	f := func(yield Yield[T]) {
 		enum.Enumerate(func(item T) bool {
-			res := yield(item)
-			return res
+			b = yield(item)
+			return b
 		})
+		//did we break in the first loop?
+		if b == YieldBreak {
+			return
+		}
 		other.Enumerate(func(item T) bool {
 			res := yield(item)
 			return res
