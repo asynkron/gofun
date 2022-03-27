@@ -169,3 +169,29 @@ func ToMapOfSlice[T any, U comparable](enum Enumerable[T], mapper func(T) U) map
 	})
 	return m
 }
+
+func Concat[T any](enum Enumerable[T], other Enumerable[T]) Enumerable[T] {
+	f := func(yield Yield[T]) {
+		enum.Enumerate(func(item T) bool {
+			res := yield(item)
+			return res
+		})
+		other.Enumerate(func(item T) bool {
+			res := yield(item)
+			return res
+		})
+	}
+	return &FuncEnumerable[T]{f}
+}
+
+func Contains[T comparable](enum Enumerable[T], item T) bool {
+	var result bool
+	enum.Enumerate(func(i T) bool {
+		if i == item {
+			result = true
+			return YieldBreak
+		}
+		return YieldContinue
+	})
+	return result
+}

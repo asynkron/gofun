@@ -15,7 +15,15 @@ func TestDistinct(t *testing.T) {
 }
 
 func TestToSlice(t *testing.T) {
-
+	values := []string{"a", "b", "c", "d", "a", "a", "a"}
+	e := FromSlice(values)
+	s := ToSlice(e)
+	//assert that values and s are equal
+	for i := 0; i < len(values); i++ {
+		if values[i] != s[i] {
+			t.Errorf("Expected %s, got %s", values[i], s[i])
+		}
+	}
 }
 func TestCount(t *testing.T) {
 
