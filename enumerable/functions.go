@@ -46,6 +46,37 @@ func Sum[T constraints.Ordered](enum Enumerable[T]) T {
 	return sum
 }
 
+func Aggregate[T any](enum Enumerable[T], seed T, agg func(T, T) T) T {
+	res := seed
+
+	enum.Enumerate(func(item T) bool {
+		res = agg(res, item)
+		return YieldContinue
+	})
+
+	return res
+}
+
+func Chunk[T any](enum Enumerable[T], size int) Enumerable[[]T] {
+
+	var chunk = make([]T, 0)
+	f := func(yield Yield[[]T]) {
+		enum.Enumerate(func(i T) bool {
+			chunk = append(chunk, i)
+			if len(chunk) == size {
+				yield(chunk)
+				chunk = make([]T, 0)
+			}
+			return YieldContinue
+		})
+		if len(chunk) > 0 {
+			yield(chunk)
+		}
+	}
+
+	return &FuncEnumerable[[]T]{f}
+}
+
 func Avg[T constraints.Signed | constraints.Unsigned](enum Enumerable[T]) T {
 
 	count := 0
@@ -113,7 +144,6 @@ func FirstOrDefault[T any](enum Enumerable[T], defaultValue T) T {
 }
 
 func LastOrDefault[T any](enum Enumerable[T], defaultValue T) T {
-
 	switch enum.(type) {
 	case *SliceEnumerable[T]:
 		s := enum.(*SliceEnumerable[T])

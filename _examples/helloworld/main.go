@@ -2,12 +2,26 @@ package main
 
 import (
 	"asynkron.com/linq/enumerable"
+	"asynkron.com/linq/options"
 	"fmt"
 	"strings"
 )
 
 func main() {
+
+	var n *options.Option[string] = nil
+	fmt.Println(n.IsSome())
+	s := options.Some("Hello World")
+	fmt.Println(s.IsSome())
+
+	//how to handle?
+	//s2 := options.Some[*string](nil)
+	//fmt.Println(s2.IsSome())
+
 	v1 := enumerable.From("hello", "foo", "bar", "hello", "hellbar", "helloworld", "a", "b", "c", "d", "e")
+	v22 := enumerable.Sum(v1)
+
+	fmt.Println(v22)
 	v2 := enumerable.Filter(v1, func(s string) bool {
 		return strings.HasPrefix(s, "hell")
 	})
