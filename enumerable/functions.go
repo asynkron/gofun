@@ -116,7 +116,6 @@ func Any[T any](enum Enumerable[T], predicate func(T) bool) bool {
 }
 
 func Filter[T any](enum Enumerable[T], predicate func(T) bool) Enumerable[T] {
-
 	f := func(yield Yield[T]) {
 		enum.Enumerate(func(item T) bool {
 			if predicate(item) {

@@ -1,29 +1,49 @@
 package options
 
 type Option[T any] struct {
-	hasValue bool
-	value    *T
+	value *T
 }
 
-func Some[T any](value T) Option[T] {
-	return Option[T]{true, &value}
+func Some[T any](value *T) *Option[T] {
+	if value == nil {
+		return nil
+	}
+	return &Option[T]{value}
 }
 
-func None[T any]() Option[T] {
-	return Option[T]{false, nil}
+func None[T any]() *Option[T] {
+	return nil
 }
 
-func (o *Option[T]) IsSome() bool {
+func IsSome[T any](o *Option[T]) bool {
 	if o == nil {
 		return false
 	}
 
-	return o.hasValue
+	if o.value == nil {
+		return false
+	}
+
+	return true
 }
 
-func (o *Option[T]) IsNone() bool {
+func IsNone[T any](o *Option[T]) bool {
+	return !IsSome(o)
+}
+
+func Map[T any, U any](o *Option[T], f func(T) U) *Option[U] {
 	if o == nil {
-		return true
+		return nil
 	}
-	return !o.hasValue
+
+	res := f(*o.value)
+	return Some[U](&res)
+}
+
+func Match[T any](o *Option[T], f func(T), n func()) {
+	if IsSome(o) {
+		f(*o.value)
+	} else {
+		n()
+	}
 }
