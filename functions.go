@@ -6,6 +6,41 @@ func FromSlice[T any](items []T) Enumerable[T] {
 	return &SliceEnumerable[T]{items}
 }
 
+//func Min[T comparable](items []T) T {
+//	if len(items) == 0 {
+//		panic("Cannot find min of empty collection")
+//	}
+//	min := items[0]
+//	for _, item := range items {
+//		if item < min {
+//			min = item
+//		}
+//	}
+//	return min
+//}
+
+func Any[T any](items []T, predicate func(T) bool) bool {
+	var res bool
+	for _, item := range items {
+		if predicate(item) {
+			res = true
+			return YieldBreak
+		}
+	}
+	return res
+}
+
+func All[T any](items []T, predicate func(T) bool) bool {
+	var res = true
+	for _, item := range items {
+		if !predicate(item) {
+			res = false
+			return YieldBreak
+		}
+	}
+	return res
+}
+
 func Filter[T any](enum Enumerable[T], predicate func(T) bool) Enumerable[T] {
 
 	f := func(yield Yield[T]) {
@@ -140,6 +175,45 @@ func Limit[T any](enum Enumerable[T], count int) Enumerable[T] {
 				return res
 			}
 			return YieldBreak
+		})
+	}
+	return &FuncEnumerable[T]{f}
+}
+
+func ToSet[T comparable](enum Enumerable[T]) *Set[T] {
+	s := NewSet[T]()
+	enum.Enumerate(func(item T) bool {
+		s.Add(item)
+		return YieldContinue
+	})
+	return s
+}
+
+func Except[T comparable](enum Enumerable[T], except Enumerable[T]) Enumerable[T] {
+	set := ToSet(except)
+	f := func(yield Yield[T]) {
+		enum.Enumerate(func(item T) bool {
+			if !set.Contains(item) {
+				res := yield(item)
+				return res
+			}
+			return YieldContinue
+		})
+	}
+	return &FuncEnumerable[T]{f}
+}
+
+func DistinctBy[T any, U comparable](enum Enumerable[T], keySelector func(T) U) Enumerable[T] {
+	f := func(yield Yield[T]) {
+		seen := make(map[U]bool)
+		enum.Enumerate(func(item T) bool {
+			key := keySelector(item)
+			if !seen[key] {
+				seen[key] = true
+				res := yield(item)
+				return res
+			}
+			return YieldContinue
 		})
 	}
 	return &FuncEnumerable[T]{f}
