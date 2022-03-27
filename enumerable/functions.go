@@ -77,7 +77,7 @@ func Chunk[T any](enum Enumerable[T], size int) Enumerable[[]T] {
 	return &FuncEnumerable[[]T]{f}
 }
 
-func Avg[T constraints.Signed | constraints.Unsigned](enum Enumerable[T]) T {
+func Avg[T constraints.Signed | constraints.Unsigned | constraints.Float](enum Enumerable[T]) T {
 
 	count := 0
 	sum := *new(T)
@@ -91,14 +91,27 @@ func Avg[T constraints.Signed | constraints.Unsigned](enum Enumerable[T]) T {
 	return sum / T(count)
 }
 
-func All[T any](items []T, predicate func(T) bool) bool {
+func All[T any](enum Enumerable[T], predicate func(T) bool) bool {
 	var res = true
-	for _, item := range items {
+	enum.Enumerate(func(item T) bool {
 		if !predicate(item) {
 			res = false
 			return YieldBreak
 		}
-	}
+		return YieldContinue
+	})
+	return res
+}
+
+func Any[T any](enum Enumerable[T], predicate func(T) bool) bool {
+	var res = false
+	enum.Enumerate(func(item T) bool {
+		if predicate(item) {
+			res = true
+			return YieldBreak
+		}
+		return YieldContinue
+	})
 	return res
 }
 
