@@ -1,4 +1,4 @@
-package main
+package enumerable
 
 const (
 	YieldContinue = true

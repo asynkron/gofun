@@ -1,6 +1,4 @@
-package main
-
-import "fmt"
+package enumerable
 
 type SliceEnumerable[T any] struct {
 	items []T
@@ -8,7 +6,7 @@ type SliceEnumerable[T any] struct {
 
 func (e *SliceEnumerable[T]) Enumerate(yield Yield[T]) {
 	for _, item := range e.items {
-		fmt.Printf("yielding %v\n", item)
+		//fmt.Printf("yielding %v\n", item)
 		res := yield(item)
 		if res == YieldBreak {
 			break

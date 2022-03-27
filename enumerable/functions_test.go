@@ -1,4 +1,4 @@
-package main
+package enumerable
 
 import "testing"
 

@@ -1,4 +1,4 @@
-package main
+package enumerable
 
 type FuncEnumerable[T any] struct {
 	enumerateFun func(yield Yield[T])

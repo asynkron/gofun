@@ -1,4 +1,4 @@
-package main
+package set
 
 import "fmt"
 
@@ -6,7 +6,7 @@ type Set[T comparable] struct {
 	m map[T]bool
 }
 
-func NewSet[T comparable]() *Set[T] {
+func New[T comparable]() *Set[T] {
 	d := make(map[T]bool)
 	return &Set[T]{m: d}
 }
@@ -61,7 +61,7 @@ func (s *Set[T]) ToSlice() []T {
 }
 
 func (s *Set[T]) Clone() *Set[T] {
-	set := NewSet[T]()
+	set := New[T]()
 	for k := range s.m {
 		set.Add(k)
 	}
@@ -85,7 +85,7 @@ func (s *Set[T]) Except(other *Set[T]) *Set[T] {
 		return s.Clone()
 	}
 
-	except := NewSet[T]()
+	except := New[T]()
 	for k := range s.m {
 		if !other.Contains(k) {
 			except.Add(k)
@@ -96,10 +96,10 @@ func (s *Set[T]) Except(other *Set[T]) *Set[T] {
 
 func (s *Set[T]) Intersect(other *Set[T]) *Set[T] {
 	if other == nil {
-		return NewSet[T]()
+		return New[T]()
 	}
 
-	intersect := NewSet[T]()
+	intersect := New[T]()
 	for k := range s.m {
 		if other.Contains(k) {
 			intersect.Add(k)

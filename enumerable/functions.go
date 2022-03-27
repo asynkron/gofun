@@ -1,6 +1,8 @@
-package main
+package enumerable
 
-import "fmt"
+import (
+	"asynkron.com/linq/set"
+)
 
 func FromSlice[T any](items []T) Enumerable[T] {
 	return &SliceEnumerable[T]{items}
@@ -168,7 +170,6 @@ func Skip[T any](enum Enumerable[T], count int) Enumerable[T] {
 func Limit[T any](enum Enumerable[T], count int) Enumerable[T] {
 	f := func(yield Yield[T]) {
 		enum.Enumerate(func(item T) bool {
-			fmt.Printf("Limit: %v\n", item)
 			if count > 0 {
 				res := yield(item)
 				count--
@@ -180,8 +181,8 @@ func Limit[T any](enum Enumerable[T], count int) Enumerable[T] {
 	return &FuncEnumerable[T]{f}
 }
 
-func ToSet[T comparable](enum Enumerable[T]) *Set[T] {
-	s := NewSet[T]()
+func ToSet[T comparable](enum Enumerable[T]) *set.Set[T] {
+	s := set.New[T]()
 	enum.Enumerate(func(item T) bool {
 		s.Add(item)
 		return YieldContinue
@@ -190,10 +191,10 @@ func ToSet[T comparable](enum Enumerable[T]) *Set[T] {
 }
 
 func Except[T comparable](enum Enumerable[T], except Enumerable[T]) Enumerable[T] {
-	set := ToSet(except)
+	s := ToSet(except)
 	f := func(yield Yield[T]) {
 		enum.Enumerate(func(item T) bool {
-			if !set.Contains(item) {
+			if !s.Contains(item) {
 				res := yield(item)
 				return res
 			}
@@ -205,7 +206,7 @@ func Except[T comparable](enum Enumerable[T], except Enumerable[T]) Enumerable[T
 
 func DistinctBy[T any, U comparable](enum Enumerable[T], keySelector func(T) U) Enumerable[T] {
 	f := func(yield Yield[T]) {
-		seen := NewSet[U]()
+		seen := set.New[U]()
 		enum.Enumerate(func(item T) bool {
 			key := keySelector(item)
 			if seen.TryAdd(key) {
@@ -220,7 +221,7 @@ func DistinctBy[T any, U comparable](enum Enumerable[T], keySelector func(T) U) 
 
 func Distinct[T comparable](enum Enumerable[T]) Enumerable[T] {
 	f := func(yield Yield[T]) {
-		seen := NewSet[T]()
+		seen := set.New[T]()
 		enum.Enumerate(func(item T) bool {
 			if seen.TryAdd(item) {
 				res := yield(item)
