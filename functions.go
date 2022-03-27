@@ -144,3 +144,18 @@ func Limit[T any](enum Enumerable[T], count int) Enumerable[T] {
 	}
 	return &FuncEnumerable[T]{f}
 }
+
+func Distinct[T comparable](enum Enumerable[T]) Enumerable[T] {
+	f := func(yield Yield[T]) {
+		seen := make(map[T]bool)
+		enum.Enumerate(func(item T) bool {
+			if !seen[item] {
+				seen[item] = true
+				res := yield(item)
+				return res
+			}
+			return YieldContinue
+		})
+	}
+	return &FuncEnumerable[T]{f}
+}

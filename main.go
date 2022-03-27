@@ -14,10 +14,11 @@ func main() {
 		return len(s)
 	})
 
-	//the code above but first Skip 2 elements then limit, name as v4
 	v4 := Skip(v3, 0)
 	v5 := Limit(v4, 2)
 	v6 := ToSlice(v5)
-	fmt.Printf("%v", v6)
 
+	for _, v := range v6 {
+		fmt.Printf("res %v\n", v)
+	}
 }
