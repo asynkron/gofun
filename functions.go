@@ -159,3 +159,13 @@ func Distinct[T comparable](enum Enumerable[T]) Enumerable[T] {
 	}
 	return &FuncEnumerable[T]{f}
 }
+
+func ToMapOfSlice[T any, U comparable](enum Enumerable[T], mapper func(T) U) map[U][]T {
+	m := make(map[U][]T)
+	enum.Enumerate(func(item T) bool {
+		key := mapper(item)
+		m[key] = append(m[key], item)
+		return YieldContinue
+	})
+	return m
+}
