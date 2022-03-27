@@ -21,4 +21,12 @@ func main() {
 	for _, v := range v6 {
 		fmt.Printf("res %v\n", v)
 	}
+
+	m := ToMapOfSlice(v1, func(s string) int {
+		return len(s)
+	})
+
+	for k, v := range m {
+		fmt.Printf("%v: %v\n", k, v)
+	}
 }
