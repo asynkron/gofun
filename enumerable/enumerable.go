@@ -15,4 +15,6 @@ type Enumerable[T any] interface {
 	//ToSlice() []T
 	//Count() int
 	//ElementAtOrDefault(index int, defaultValue T) T
+
+	//Cannot make Map/Select as methods cannot have type parameters
 }
