@@ -2,6 +2,35 @@ package enumerable
 
 import "testing"
 
+func TestToMapOfSlice(t *testing.T) {
+	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10}
+	e := FromSlice(values)
+	m := ToMapOfSlice(e, func(i int) int {
+		return i
+	})
+	if len(m) != 10 {
+		t.Errorf("Expected 10, got %d", len(m))
+	}
+}
+
+func TestMin(t *testing.T) {
+	values := []int{1, 2, -3, 4, 5, 6, 7, 8, 9, 99, 10, 10, 10}
+	e := FromSlice(values)
+	max := Min(e)
+	if max != -3 {
+		t.Errorf("Expected -3, but got %d", max)
+	}
+}
+
+func TestSum(t *testing.T) {
+	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10}
+	e := FromSlice(values)
+	sum := Sum(e)
+	if sum != 85 {
+		t.Errorf("Expected 85, got %d", sum)
+	}
+}
+
 func TestMax(t *testing.T) {
 	values := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 99, 10, 10, 10}
 	e := FromSlice(values)
