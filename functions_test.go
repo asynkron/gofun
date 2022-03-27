@@ -11,7 +11,6 @@ func TestDistinct(t *testing.T) {
 	if c != 4 {
 		t.Errorf("Expected 4, got %d", c)
 	}
-
 }
 
 func TestToSlice(t *testing.T) {
@@ -25,6 +24,7 @@ func TestToSlice(t *testing.T) {
 		}
 	}
 }
+
 func TestCount(t *testing.T) {
 
 }
@@ -50,5 +50,29 @@ func TestLimit(t *testing.T) {
 }
 
 func TestMap(t *testing.T) {
+
+}
+
+func TestAll(t *testing.T) {
+
+}
+
+func TestAny(t *testing.T) {
+
+}
+
+func TestConcat(t *testing.T) {
+
+}
+
+func TestContains(t *testing.T) {
+
+}
+
+func TestDistinctBy(t *testing.T) {
+
+}
+
+func TestExcept(t *testing.T) {
 
 }

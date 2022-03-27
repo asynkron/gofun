@@ -205,11 +205,10 @@ func Except[T comparable](enum Enumerable[T], except Enumerable[T]) Enumerable[T
 
 func DistinctBy[T any, U comparable](enum Enumerable[T], keySelector func(T) U) Enumerable[T] {
 	f := func(yield Yield[T]) {
-		seen := make(map[U]bool)
+		seen := NewSet[U]()
 		enum.Enumerate(func(item T) bool {
 			key := keySelector(item)
-			if !seen[key] {
-				seen[key] = true
+			if seen.TryAdd(key) {
 				res := yield(item)
 				return res
 			}
@@ -221,10 +220,9 @@ func DistinctBy[T any, U comparable](enum Enumerable[T], keySelector func(T) U) 
 
 func Distinct[T comparable](enum Enumerable[T]) Enumerable[T] {
 	f := func(yield Yield[T]) {
-		seen := make(map[T]bool)
+		seen := NewSet[T]()
 		enum.Enumerate(func(item T) bool {
-			if !seen[item] {
-				seen[item] = true
+			if seen.TryAdd(item) {
 				res := yield(item)
 				return res
 			}

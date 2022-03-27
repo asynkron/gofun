@@ -33,3 +33,11 @@ func (s *Set[T]) IsEmpty() bool {
 func (s *Set[T]) Clear() {
 	s.m = make(map[T]bool)
 }
+
+func (s *Set[T]) TryAdd(e T) bool {
+	if s.Contains(e) {
+		return false
+	}
+	s.Add(e)
+	return true
+}
