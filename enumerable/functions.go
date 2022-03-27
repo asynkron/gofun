@@ -46,6 +46,20 @@ func Sum[T constraints.Ordered](enum Enumerable[T]) T {
 	return sum
 }
 
+func Avg[T constraints.Signed | constraints.Unsigned](enum Enumerable[T]) T {
+
+	count := 0
+	sum := *new(T)
+
+	enum.Enumerate(func(item T) bool {
+		sum += item
+		count++
+		return YieldContinue
+	})
+
+	return sum / T(count)
+}
+
 func All[T any](items []T, predicate func(T) bool) bool {
 	var res = true
 	for _, item := range items {
