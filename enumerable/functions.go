@@ -2,34 +2,48 @@ package enumerable
 
 import (
 	"asynkron.com/linq/set"
+	"golang.org/x/exp/constraints"
 )
 
 func FromSlice[T any](items []T) Enumerable[T] {
 	return &SliceEnumerable[T]{items}
 }
 
-//func Min[T comparable](items []T) T {
-//	if len(items) == 0 {
-//		panic("Cannot find min of empty collection")
-//	}
-//	min := items[0]
-//	for _, item := range items {
-//		if item < min {
-//			min = item
-//		}
-//	}
-//	return min
-//}
+func Min[T constraints.Ordered](enum Enumerable[T]) T {
 
-func Any[T any](items []T, predicate func(T) bool) bool {
-	var res bool
-	for _, item := range items {
-		if predicate(item) {
-			res = true
-			return YieldBreak
+	min := FirstOrDefault(enum, *new(T))
+	enum.Enumerate(func(item T) bool {
+		if item < min {
+			min = item
 		}
-	}
-	return res
+		return YieldContinue
+	})
+
+	return min
+}
+
+func Max[T constraints.Ordered](enum Enumerable[T]) T {
+
+	max := FirstOrDefault(enum, *new(T))
+	enum.Enumerate(func(item T) bool {
+		if item > max {
+			max = item
+		}
+		return YieldContinue
+	})
+
+	return max
+}
+
+func Sum[T constraints.Ordered](enum Enumerable[T]) T {
+
+	sum := *new(T)
+	enum.Enumerate(func(item T) bool {
+		sum += item
+		return YieldContinue
+	})
+
+	return sum
 }
 
 func All[T any](items []T, predicate func(T) bool) bool {
