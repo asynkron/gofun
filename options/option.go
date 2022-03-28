@@ -47,3 +47,12 @@ func Match[T any](o *Option[T], f func(T), n func()) {
 		n()
 	}
 }
+
+func GetOrDefault[T any](o *Option[T], defaultValue T) T {
+	if IsSome(o) {
+		v := o.value
+		return *v
+	}
+
+	return defaultValue
+}
