@@ -64,8 +64,9 @@ func Chunk[T any](enum Enumerable[T], size int) Enumerable[[]T] {
 		enum.Enumerate(func(i T) bool {
 			chunk = append(chunk, i)
 			if len(chunk) == size {
-				yield(chunk)
+				res := yield(chunk)
 				chunk = make([]T, 0)
+				return res
 			}
 			return YieldContinue
 		})
@@ -139,10 +140,11 @@ func ToSlice[T any](enum Enumerable[T]) []T {
 }
 
 func FirstOrDefault[T any](enum Enumerable[T], defaultValue T) T {
-	switch enum.(type) {
+
+	switch e := enum.(type) {
 	case *SliceEnumerable[T]:
-		if len(enum.(*SliceEnumerable[T]).items) > 0 {
-			return enum.(*SliceEnumerable[T]).items[0]
+		if len(e.items) > 0 {
+			return e.items[0]
 		}
 		return defaultValue
 	default:
@@ -156,11 +158,10 @@ func FirstOrDefault[T any](enum Enumerable[T], defaultValue T) T {
 }
 
 func LastOrDefault[T any](enum Enumerable[T], defaultValue T) T {
-	switch enum.(type) {
+	switch e := enum.(type) {
 	case *SliceEnumerable[T]:
-		s := enum.(*SliceEnumerable[T])
-		if len(s.items) > 0 {
-			return s.items[len(s.items)-1]
+		if len(e.items) > 0 {
+			return e.items[len(e.items)-1]
 		}
 		return defaultValue
 	default:
@@ -174,10 +175,10 @@ func LastOrDefault[T any](enum Enumerable[T], defaultValue T) T {
 }
 
 func ElementAtOrDefault[T any](enum Enumerable[T], index int, defaultValue T) T {
-	switch enum.(type) {
+	switch e := enum.(type) {
 	case *SliceEnumerable[T]:
-		if len(enum.(*SliceEnumerable[T]).items) > index {
-			return enum.(*SliceEnumerable[T]).items[index]
+		if len(e.items) > index {
+			return e.items[index]
 		}
 		return defaultValue
 	default:
@@ -195,9 +196,9 @@ func ElementAtOrDefault[T any](enum Enumerable[T], index int, defaultValue T) T 
 }
 
 func Count[T any](enum Enumerable[T]) int {
-	switch enum.(type) {
+	switch e := enum.(type) {
 	case *SliceEnumerable[T]:
-		return len(enum.(*SliceEnumerable[T]).items)
+		return len(e.items)
 	default:
 		var count int
 		enum.Enumerate(func(item T) bool {
