@@ -275,14 +275,13 @@ func TestSet_Except(t *testing.T) {
 	if s3.Size() != 0 {
 		t.Errorf("Set should be empty")
 	}
-	s2.Add("d")
-	s3 = s.Except(s2)
-	if s3.Size() != 1 {
-		t.Errorf("Set should have 1 element")
+
+	s.Add("e")
+	s4 := s.Except(s2)
+	if s4.Size() != 1 {
+		t.Errorf("Set should contain 1 item")
 	}
-	if !s3.Contains("c") {
-		t.Errorf("Set should contain 'c'")
-	}
+
 }
 
 func TestSet_Intersect(t *testing.T) {
