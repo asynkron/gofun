@@ -6,8 +6,11 @@ type Set[T comparable] struct {
 	m map[T]bool
 }
 
-func New[T comparable]() *Set[T] {
+func New[T comparable](items ...T) *Set[T] {
 	d := make(map[T]bool)
+	for _, item := range items {
+		d[item] = true
+	}
 	return &Set[T]{m: d}
 }
 
