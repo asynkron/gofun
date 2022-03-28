@@ -3,11 +3,7 @@ package set
 import "testing"
 
 func TestSet_IsSuperset(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s.Add("d")
+	s := New[string]("a", "b", "c", "d")
 
 	if !s.IsSuperset(New[string]()) {
 		t.Errorf("Expected true, got false")
@@ -35,11 +31,7 @@ func TestSet_IsSuperset(t *testing.T) {
 }
 
 func TestSet_Remove(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s.Add("d")
+	s := New[string]("a", "b", "c", "d")
 
 	s.Remove("a")
 	if s.Contains("a") {
@@ -63,11 +55,7 @@ func TestSet_Remove(t *testing.T) {
 }
 
 func TestSet_Size(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s.Add("d")
+	s := New[string]("a", "b", "c", "d")
 
 	if s.Size() != 4 {
 		t.Errorf("Expected 4, got %d", s.Size())
@@ -95,11 +83,7 @@ func TestSet_Size(t *testing.T) {
 }
 
 func TestSet_String(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s.Add("d")
+	s := New[string]("a", "b", "c", "d")
 
 	if s.String() != "{a, b, c, d}" {
 		t.Errorf("Expected {a, b, c, d}, got %s", s.String())
@@ -107,11 +91,7 @@ func TestSet_String(t *testing.T) {
 }
 
 func TestSet_ToSlice(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s.Add("d")
+	s := New[string]("a", "b", "c", "d")
 	slice := s.ToSlice()
 
 	if len(slice) != 4 {
@@ -120,11 +100,7 @@ func TestSet_ToSlice(t *testing.T) {
 }
 
 func TestSet_TryAdd(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s.Add("d")
+	s := New[string]("a", "b", "c", "d")
 
 	if s.TryAdd("a") {
 		t.Errorf("Expected false, got true")
@@ -136,11 +112,7 @@ func TestSet_TryAdd(t *testing.T) {
 }
 
 func TestSet_TryRemove(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s.Add("d")
+	s := New[string]("a", "b", "c", "d")
 
 	if !s.TryRemove("a") {
 		t.Errorf("Expected true, got false")
@@ -152,17 +124,9 @@ func TestSet_TryRemove(t *testing.T) {
 }
 
 func TestSet_Union(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s.Add("d")
+	s := New[string]("a", "b", "c", "d")
 
-	s2 := New[string]()
-	s2.Add("a")
-	s2.Add("b")
-	s2.Add("c")
-	s2.Add("e")
+	s2 := New[string]("a", "b", "c", "e")
 
 	s3 := s.Union(s2)
 	if s3.Size() != 5 {
@@ -198,20 +162,14 @@ func TestNew(t *testing.T) {
 }
 
 func TestSet_Add(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
+	s := New[string]("a", "b", "c")
 	if s.Size() != 3 {
 		t.Errorf("Set should have 3 elements")
 	}
 }
 
 func TestSet_Clear(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
+	s := New[string]("a", "b", "c")
 	s.Clear()
 	if s.Size() != 0 {
 		t.Errorf("Set should be empty")
@@ -219,10 +177,7 @@ func TestSet_Clear(t *testing.T) {
 }
 
 func TestSet_Clone(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
+	s := New[string]("a", "b", "c")
 	s2 := s.Clone()
 	s.Clear()
 	if s2.Size() != 3 {
@@ -231,10 +186,7 @@ func TestSet_Clone(t *testing.T) {
 }
 
 func TestSet_Contains(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
+	s := New[string]("a", "b", "c")
 	if !s.Contains("a") {
 		t.Errorf("Set should contain 'a'")
 	}
@@ -244,14 +196,8 @@ func TestSet_Contains(t *testing.T) {
 }
 
 func TestSet_Equals(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s2 := New[string]()
-	s2.Add("a")
-	s2.Add("b")
-	s2.Add("c")
+	s := New[string]("a", "b", "c")
+	s2 := New[string]("a", "b", "c")
 	if !s.Equals(s2) {
 		t.Errorf("Sets should be equal")
 	}
@@ -263,14 +209,8 @@ func TestSet_Equals(t *testing.T) {
 }
 
 func TestSet_Except(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s2 := New[string]()
-	s2.Add("a")
-	s2.Add("b")
-	s2.Add("c")
+	s := New[string]("a", "b", "c")
+	s2 := New[string]("a", "b", "c")
 	s3 := s.Except(s2)
 	if s3.Size() != 0 {
 		t.Errorf("Set should be empty")
@@ -285,16 +225,8 @@ func TestSet_Except(t *testing.T) {
 }
 
 func TestSet_Intersect(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s.Add("d")
-	s2 := New[string]()
-	s2.Add("a")
-	s2.Add("b")
-	s2.Add("c")
-	s2.Add("e")
+	s := New[string]("a", "b", "c", "d")
+	s2 := New[string]("a", "b", "c", "e")
 	s3 := s.Intersect(s2)
 	if s3.Size() != 3 {
 		t.Errorf("Set should have 3 elements")
@@ -314,14 +246,8 @@ func TestSet_IsEmpty(t *testing.T) {
 }
 
 func TestSet_IsProperSubset(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s2 := New[string]()
-	s2.Add("a")
-	s2.Add("b")
-	s2.Add("c")
+	s := New[string]("a", "b", "c")
+	s2 := New[string]("a", "b", "c")
 	s3 := s.IsProperSubset(s2)
 	if s3 {
 		t.Errorf("Set should not be a proper subset")
@@ -334,14 +260,8 @@ func TestSet_IsProperSubset(t *testing.T) {
 }
 
 func TestSet_IsProperSuperset(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s2 := New[string]()
-	s2.Add("a")
-	s2.Add("b")
-	s2.Add("c")
+	s := New[string]("a", "b", "c")
+	s2 := New[string]("a", "b", "c")
 	s3 := s.IsProperSuperset(s2)
 	if s3 {
 		t.Errorf("Set should not be a proper superset")
@@ -354,14 +274,8 @@ func TestSet_IsProperSuperset(t *testing.T) {
 }
 
 func TestSet_IsSubset(t *testing.T) {
-	s := New[string]()
-	s.Add("a")
-	s.Add("b")
-	s.Add("c")
-	s2 := New[string]()
-	s2.Add("a")
-	s2.Add("b")
-	s2.Add("c")
+	s := New[string]("a", "b", "c")
+	s2 := New[string]("a", "b", "c")
 	s3 := s.IsSubset(s2)
 	if !s3 {
 		t.Errorf("Set should be a subset")
