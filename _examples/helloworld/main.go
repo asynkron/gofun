@@ -3,28 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/asynkron/gofun/enumerable"
-	"github.com/asynkron/gofun/options"
 	"strings"
 )
 
 func main() {
-
-	//var n *options.Option[string] = nil
-	//fmt.Println(options.IsSome(n))
-	//s := options.Some("Hello World")
-	//fmt.Println(options.IsSome(s))
-
-	//how to handle?
-	s2 := options.None[string]()
-	fmt.Println(options.IsSome(s2))
-	options.Match(s2,
-		func(v string) {
-			fmt.Println(v)
-		},
-		func() {
-			fmt.Println("None")
-		})
-
 	v1 := enumerable.From("hello", "foo", "bar", "hello", "hellbar", "helloworld", "a", "b", "c", "d", "e")
 	v22 := enumerable.Sum(v1)
 
