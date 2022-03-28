@@ -1,7 +1,7 @@
 package enumerable
 
 import (
-	"asynkron.com/linq/set"
+	"github.com/asynkron/gofun/set"
 	"golang.org/x/exp/constraints"
 )
 

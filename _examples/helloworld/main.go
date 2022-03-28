@@ -1,9 +1,9 @@
 package main
 
 import (
-	"asynkron.com/linq/enumerable"
-	"asynkron.com/linq/options"
 	"fmt"
+	"github.com/asynkron/gofun/enumerable"
+	"github.com/asynkron/gofun/options"
 	"strings"
 )
 
@@ -15,7 +15,7 @@ func main() {
 	//fmt.Println(options.IsSome(s))
 
 	//how to handle?
-	s2 := options.Some[string](nil)
+	s2 := options.None[string]()
 	fmt.Println(options.IsSome(s2))
 	options.Match(s2,
 		func(v string) {
