@@ -360,8 +360,8 @@ func ToMapOfSlice[T any, U comparable](enum Enumerable[T], mapper func(T) U) map
 }
 
 func Concat[T any](enum Enumerable[T], other Enumerable[T]) Enumerable[T] {
-	b := YieldContinue
 	f := func(yield Yield[T]) {
+		b := YieldContinue
 		enum.Enumerate(func(item T) bool {
 			b = yield(item)
 			return b
