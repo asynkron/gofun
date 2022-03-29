@@ -9,7 +9,7 @@ type Yield[T any] func(item T) bool
 
 type Enumerable[T any] interface {
 	Enumerate(yield Yield[T])
-
+	GetEnumerator() Enumerator[T]
 	//Cannot make Map/Select as methods cannot have type parameters
 }
 

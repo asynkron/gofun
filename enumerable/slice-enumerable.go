@@ -21,7 +21,7 @@ func (e *SliceEnumerable[T]) GetEnumerator() Enumerator[T] {
 				index++
 				return e.items[index-1], true
 			}
-			return nil, false
+			return *new(T), false
 		},
 	}
 }
