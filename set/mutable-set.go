@@ -21,6 +21,12 @@ func (s *MutableSet[T]) Add(e T) {
 	s.m[e] = true
 }
 
+func (s *MutableSet[T]) AddRange(e ...T) {
+	for _, i := range e {
+		s.Add(i)
+	}
+}
+
 func (s *MutableSet[T]) Remove(e T) {
 	delete(s.m, e)
 }

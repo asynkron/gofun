@@ -23,6 +23,15 @@ func (s *ImmutableSet[T]) Add(e T) *ImmutableSet[T] {
 	return c
 }
 
+func (s *ImmutableSet[T]) AddRange(e ...T) *ImmutableSet[T] {
+	c := s.Clone()
+	for _, i := range e {
+		c.m[i] = true
+	}
+
+	return c
+}
+
 func (s *ImmutableSet[T]) Remove(e T) *ImmutableSet[T] {
 	c := s.Clone()
 	delete(c.m, e)
