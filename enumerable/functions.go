@@ -1,8 +1,13 @@
 package enumerable
 
 import (
+	"fmt"
 	"github.com/asynkron/gofun/set"
 	"golang.org/x/exp/constraints"
+)
+
+var (
+	emptySequenceError = fmt.Errorf("sequence is empty")
 )
 
 func FromSlice[T any](items []T) Enumerable[T] {
@@ -140,58 +145,98 @@ func ToSlice[T any](enum Enumerable[T]) []T {
 }
 
 func FirstOrDefault[T any](enum Enumerable[T], defaultValue T) T {
+	res, err := First(enum)
+	if err != nil {
+		return defaultValue
+	}
+	return res
+}
+
+func First[T any](enum Enumerable[T]) (T, error) {
 
 	switch e := enum.(type) {
 	case *SliceEnumerable[T]:
 		if len(e.items) > 0 {
-			return e.items[0]
+			return e.items[0], nil
 		}
-		return defaultValue
+		return *new(T), emptySequenceError
 	default:
 		var result T
+		var found = false
 		enum.Enumerate(func(item T) bool {
 			result = item
+			found = true
 			return YieldBreak
 		})
-		return result
+		if found {
+			return result, nil
+		}
+		return *new(T), emptySequenceError
+	}
+}
+
+func Last[T any](enum Enumerable[T]) (T, error) {
+	switch e := enum.(type) {
+	case *SliceEnumerable[T]:
+		if len(e.items) > 0 {
+			return e.items[len(e.items)-1], nil
+		}
+		return *new(T), emptySequenceError
+	default:
+		var result T
+		var found = false
+		enum.Enumerate(func(item T) bool {
+			result = item
+			found = true
+			return YieldContinue
+		})
+		if found {
+			return result, nil
+		}
+		return *new(T), emptySequenceError
 	}
 }
 
 func LastOrDefault[T any](enum Enumerable[T], defaultValue T) T {
-	switch e := enum.(type) {
-	case *SliceEnumerable[T]:
-		if len(e.items) > 0 {
-			return e.items[len(e.items)-1]
-		}
+	res, err := Last(enum)
+	if err != nil {
 		return defaultValue
-	default:
-		var result T
-		enum.Enumerate(func(item T) bool {
-			result = item
-			return YieldContinue
-		})
-		return result
 	}
+	return res
 }
 
 func ElementAtOrDefault[T any](enum Enumerable[T], index int, defaultValue T) T {
+	res, err := ElementAt(enum, index)
+	if err != nil {
+		return defaultValue
+	}
+	return res
+}
+
+func ElementAt[T any](enum Enumerable[T], index int) (T, error) {
 	switch e := enum.(type) {
 	case *SliceEnumerable[T]:
 		if len(e.items) > index {
-			return e.items[index]
+			return e.items[index], nil
 		}
-		return defaultValue
+		return *new(T), emptySequenceError
 	default:
 		var result T
+		var found = false
 		enum.Enumerate(func(item T) bool {
 			if index == 0 {
 				result = item
+				found = true
 				return YieldBreak
 			}
 			index--
 			return YieldContinue
 		})
-		return result
+
+		if found {
+			return result, nil
+		}
+		return *new(T), emptySequenceError
 	}
 }
 
