@@ -21,7 +21,6 @@ func (s *ImmutableSet[T]) Add(e T) *ImmutableSet[T] {
 	c := s.Clone()
 	c.m[e] = true
 	return c
-
 }
 
 func (s *ImmutableSet[T]) Remove(e T) *ImmutableSet[T] {
@@ -48,11 +47,7 @@ func (s *ImmutableSet[T]) ToSlice() []T {
 }
 
 func (s *ImmutableSet[T]) Clone() *ImmutableSet[T] {
-	set := NewImmutable[T]()
-	for k := range s.m {
-		set.Add(k)
-	}
-	return set
+	return &ImmutableSet[T]{m: maps.Clone(s.m)}
 }
 
 func (s *ImmutableSet[T]) Union(other Set[T]) *ImmutableSet[T] {

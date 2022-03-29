@@ -63,11 +63,7 @@ func (s *MutableSet[T]) ToSlice() []T {
 }
 
 func (s *MutableSet[T]) Clone() *MutableSet[T] {
-	set := New[T]()
-	for k := range s.m {
-		set.Add(k)
-	}
-	return set
+	return &MutableSet[T]{m: maps.Clone(s.m)}
 }
 
 func (s *MutableSet[T]) Union(other Set[T]) *MutableSet[T] {
@@ -76,6 +72,7 @@ func (s *MutableSet[T]) Union(other Set[T]) *MutableSet[T] {
 	}
 
 	union := s.Clone()
+
 	for _, k := range other.ToSlice() {
 		union.Add(k)
 	}
