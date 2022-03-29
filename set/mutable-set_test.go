@@ -164,7 +164,7 @@ func TestNew(t *testing.T) {
 func TestSet_Add(t *testing.T) {
 	s := New[string]("a", "b", "c")
 	if s.Size() != 3 {
-		t.Errorf("Set should have 3 elements")
+		t.Errorf("MutableSet should have 3 elements")
 	}
 }
 
@@ -172,7 +172,7 @@ func TestSet_Clear(t *testing.T) {
 	s := New[string]("a", "b", "c")
 	s.Clear()
 	if s.Size() != 0 {
-		t.Errorf("Set should be empty")
+		t.Errorf("MutableSet should be empty")
 	}
 }
 
@@ -181,17 +181,17 @@ func TestSet_Clone(t *testing.T) {
 	s2 := s.Clone()
 	s.Clear()
 	if s2.Size() != 3 {
-		t.Errorf("Set should have 3 elements")
+		t.Errorf("MutableSet should have 3 elements")
 	}
 }
 
 func TestSet_Contains(t *testing.T) {
 	s := New[string]("a", "b", "c")
 	if !s.Contains("a") {
-		t.Errorf("Set should contain 'a'")
+		t.Errorf("MutableSet should contain 'a'")
 	}
 	if s.Contains("d") {
-		t.Errorf("Set should not contain 'd'")
+		t.Errorf("MutableSet should not contain 'd'")
 	}
 }
 
@@ -213,13 +213,13 @@ func TestSet_Except(t *testing.T) {
 	s2 := New[string]("a", "b", "c")
 	s3 := s.Except(s2)
 	if s3.Size() != 0 {
-		t.Errorf("Set should be empty")
+		t.Errorf("MutableSet should be empty")
 	}
 
 	s.Add("e")
 	s4 := s.Except(s2)
 	if s4.Size() != 1 {
-		t.Errorf("Set should contain 1 item")
+		t.Errorf("MutableSet should contain 1 item")
 	}
 
 }
@@ -229,7 +229,7 @@ func TestSet_Intersect(t *testing.T) {
 	s2 := New[string]("a", "b", "c", "e")
 	s3 := s.Intersect(s2)
 	if s3.Size() != 3 {
-		t.Errorf("Set should have 3 elements")
+		t.Errorf("MutableSet should have 3 elements")
 	}
 
 }
@@ -237,11 +237,11 @@ func TestSet_Intersect(t *testing.T) {
 func TestSet_IsEmpty(t *testing.T) {
 	s := New[string]()
 	if !s.IsEmpty() {
-		t.Errorf("Set should be empty")
+		t.Errorf("MutableSet should be empty")
 	}
 	s.Add("a")
 	if s.IsEmpty() {
-		t.Errorf("Set should not be empty")
+		t.Errorf("MutableSet should not be empty")
 	}
 }
 
@@ -250,12 +250,12 @@ func TestSet_IsProperSubset(t *testing.T) {
 	s2 := New[string]("a", "b", "c")
 	s3 := s.IsProperSubset(s2)
 	if s3 {
-		t.Errorf("Set should not be a proper subset")
+		t.Errorf("MutableSet should not be a proper subset")
 	}
 	s2.Add("d")
 	s3 = s.IsProperSubset(s2)
 	if !s3 {
-		t.Errorf("Set should be a proper subset")
+		t.Errorf("MutableSet should be a proper subset")
 	}
 }
 
@@ -264,12 +264,12 @@ func TestSet_IsProperSuperset(t *testing.T) {
 	s2 := New[string]("a", "b", "c")
 	s3 := s.IsProperSuperset(s2)
 	if s3 {
-		t.Errorf("Set should not be a proper superset")
+		t.Errorf("MutableSet should not be a proper superset")
 	}
 	s.Add("d")
 	s3 = s.IsProperSuperset(s2)
 	if !s3 {
-		t.Errorf("Set should be a proper superset")
+		t.Errorf("MutableSet should be a proper superset")
 	}
 }
 
@@ -278,7 +278,7 @@ func TestSet_IsSubset(t *testing.T) {
 	s2 := New[string]("a", "b", "c")
 	s3 := s.IsSubset(s2)
 	if !s3 {
-		t.Errorf("Set should be a subset")
+		t.Errorf("MutableSet should be a subset")
 	}
 
 }

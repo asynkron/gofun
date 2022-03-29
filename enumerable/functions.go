@@ -297,7 +297,7 @@ func Limit[T any](enum Enumerable[T], count int) Enumerable[T] {
 	return &FuncEnumerable[T]{f}
 }
 
-func ToSet[T comparable](enum Enumerable[T]) *set.Set[T] {
+func ToSet[T comparable](enum Enumerable[T]) *set.MutableSet[T] {
 	s := set.New[T]()
 	enum.Enumerate(func(item T) bool {
 		s.Add(item)
