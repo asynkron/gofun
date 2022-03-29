@@ -64,8 +64,8 @@ func Aggregate[T any](enum Enumerable[T], seed T, agg func(T, T) T) T {
 
 func Chunk[T any](enum Enumerable[T], size int) Enumerable[[]T] {
 
-	var chunk = make([]T, 0)
 	f := func(yield Yield[[]T]) {
+		var chunk = make([]T, 0)
 		enum.Enumerate(func(i T) bool {
 			chunk = append(chunk, i)
 			if len(chunk) == size {
