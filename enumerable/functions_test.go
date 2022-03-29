@@ -19,9 +19,9 @@ func TestToMapOfSlice(t *testing.T) {
 func TestMin(t *testing.T) {
 	values := []int{1, 2, -3, 4, 5, 6, 7, 8, 9, 99, 10, 10, 10}
 	e := FromSlice(values)
-	max := Min(e)
-	if max != -3 {
-		t.Errorf("Expected -3, but got %d", max)
+	min := Min(e)
+	if min != -3 {
+		t.Errorf("Expected -3, but got %d", min)
 	}
 }
 
