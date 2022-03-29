@@ -12,3 +12,15 @@ type Enumerable[T any] interface {
 
 	//Cannot make Map/Select as methods cannot have type parameters
 }
+
+type Enumerator[T any] interface {
+	MoveNext() (T, bool)
+}
+
+type FuncEnumerator[T any] struct {
+	fun func() (T, bool)
+}
+
+func (fe *FuncEnumerator[T]) MoveNext() (T, bool) {
+	return fe.fun()
+}

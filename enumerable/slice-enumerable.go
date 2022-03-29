@@ -12,3 +12,16 @@ func (e *SliceEnumerable[T]) Enumerate(yield Yield[T]) {
 		}
 	}
 }
+
+func (e *SliceEnumerable[T]) GetEnumerator() Enumerator[T] {
+	var index = 0
+	return &FuncEnumerator[T]{
+		fun: func() (T, bool) {
+			if index < len(e.items) {
+				index++
+				return e.items[index-1], true
+			}
+			return nil, false
+		},
+	}
+}
